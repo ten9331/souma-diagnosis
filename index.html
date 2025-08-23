@@ -6,46 +6,38 @@
   <style>
     body {
       font-family: "Yu Gothic", sans-serif;
+      background: #fffacd; /* レモン色の背景 */
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center; /* 垂直方向の中央寄せ */
+      align-items: center;     /* 水平方向の中央寄せ */
       text-align: center;
-      background: #fff0f5;
-      padding: 40px;
-      overflow: hidden;
     }
 
     h1 {
       color: #ff4081;
-      margin-bottom: 20px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .input-area {
-      position: relative;
-      display: inline-block;
-      margin-bottom: 20px;
+      font-size: 36px;
+      margin-bottom: 30px;
     }
 
     input {
-      padding: 10px;
-      font-size: 16px;
+      padding: 12px;
+      font-size: 18px;
       border-radius: 8px;
       border: 1px solid #ccc;
-      z-index: 2;
-      position: relative;
     }
 
     button {
       padding: 12px 24px;
       font-size: 18px;
       border: none;
+      border-radius: 8px;
       background: #ff80ab;
       color: white;
-      border-radius: 8px;
+      margin-top: 20px;
       cursor: pointer;
-      transition: 0.3s;
-      z-index: 2;
-      position: relative;
-      margin-top: 10px;
     }
 
     button:hover {
@@ -55,100 +47,30 @@
     #result {
       font-size: 28px;
       margin-top: 40px;
-      margin-bottom: 15px;
-      z-index: 2;
-      position: relative;
-      opacity: 0;
     }
 
     #fantasy {
       font-size: 20px;
-      white-space: pre-line;
       line-height: 1.8;
       max-width: 600px;
-      margin: 0 auto;
-      z-index: 2;
-      position: relative;
-      opacity: 0;
-    }
-
-    /* フェードインアニメーション */
-    .fade-in {
-      animation: fadeIn 1s ease forwards;
-    }
-
-    @keyframes fadeIn {
-      0% { opacity: 0; transform: translateY(10px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-
-    /* 飾りの星・ひまわり */
-    .floating {
-      position: absolute;
-      animation: floatAround 6s infinite ease-in-out alternate;
-      pointer-events: none;
-      font-size: 24px;
-      opacity: 0.8;
-    }
-
-    @keyframes floatAround {
-      0% { transform: translateY(0) rotate(0deg); }
-      100% { transform: translateY(-20px) rotate(360deg); }
-    }
-
-    /* ハート */
-    .heart {
-      position: absolute;
-      font-size: 24px;
-      opacity: 0.7;
-      animation: floatUp linear forwards;
-      pointer-events: none;
-    }
-
-    @keyframes floatUp {
-      0% {
-        transform: translateY(0) scale(1);
-        opacity: 0.8;
-      }
-      100% {
-        transform: translateY(-120vh) scale(1.5);
-        opacity: 0;
-      }
+      margin: 20px auto;
     }
   </style>
 </head>
 <body>
   <h1>そうまくんと〇〇診断</h1>
 
-  <!-- 入力エリア（星とひまわり付き） -->
-  <div class="input-area">
-    <input type="text" id="username" placeholder="名前を入力してね">
-    <div class="floating" style="top:-30px; left:-40px;">⭐</div>
-    <div class="floating" style="top:-20px; right:-40px;">🌻</div>
-    <div class="floating" style="bottom:-30px; left:-30px;">⭐</div>
-    <div class="floating" style="bottom:-20px; right:-30px;">🌻</div>
-  </div>
+  <input type="text" id="username" placeholder="名前を入力してね">
   <br>
   <button onclick="diagnose()">診断する！</button>
 
-  <div id="result-area">
-    <h2 id="result"></h2>
-    <p id="fantasy"></p>
-    <button id="retry" style="display:none;" onclick="retry()">もう一度診断する</button>
-  </div>
+  <h2 id="result"></h2>
+  <p id="fantasy"></p>
 
   <script>
     const results = [
-      { title: "そうまくんとゲームする！", text: "勝負に負けて拗ねていたら、そうまくんが頭をぽんっと撫でてきた。\n『次は本気出していい？』って挑発するみたいに笑う顔が近い。\n視線を逸らしたのに、鼓動の速さまでは隠せなかった。", type: "dokidoki" },
-      { title: "そうまくんと映画を見る！", text: "暗い館内でこっそり横顔を盗み見た。\nスクリーンの光に照らされて、視線が一瞬だけ重なる。\n『なに？』と囁かれて、心臓が勝手に跳ね上がった。", type: "seishun" },
-      { title: "そうまくんと放課後カフェに行く！", text: "向かい合って座ると、机越しに指先が触れた。\n『アイス溶けるぞ』と笑う彼の声が甘すぎて。\nカップの中の氷より、胸の中の熱が勝っていた。", type: "dokidoki" },
-      { title: "そうまくんと夏祭り！", text: "浴衣姿で隣に立つと、なんだか距離が近い。\n人混みで迷わないようにと、そっと手を繋がれた。\n夜空の花火より、彼の横顔に目を奪われた。", type: "seishun" },
-      { title: "そうまくんと海に行く！", text: "波打ち際ではしゃぐ彼に水をかけたら、逆襲されて大笑い。\n『冷たいって！』と叫んだ声も、潮風に混ざって弾む。\nきらめく海より心臓が跳ねてるのは秘密。", type: "seishun" },
-      { title: "そうまくんと勉強会！", text: "ノートを覗き込んだら、距離が近すぎて心臓がうるさい。\n赤ペンで訂正してくれる横顔に見惚れてしまう。\n『集中できてる？』って笑われて、ますます集中できない。", type: "dokidoki" },
-      { title: "そうまくんと昼寝！", text: "教室の隅で並んで寝転んだ。\n寝息がすぐ近くにあって、触れたら壊れそうな距離感。\n静かな午後が、やけに愛おしかった。", type: "seishun" },
-      { title: "そうまくんと買い物！", text: "おそろいのキーホルダーを見つけて、思わず顔を見合わせた。\n『買う？』って笑われて、心の中まで見透かされたみたい。\n小さな袋の中に、大きなときめきが詰まった。", type: "dokidoki" },
-      { title: "そうまくんとカラオケ！", text: "マイクを渡されたら、思わず声が裏返った。\n笑うそうまくんの歌声がまぶしくて。\n不思議と悔しくなくて、もっと聴いていたくなった。", type: "seishun" },
-      { title: "そうまくんと雨宿り！", text: "突然の雨、軒下で肩が触れそうな距離に立つ。\n『止むまで一緒にいよ』の一言が、雨音より響いた。\n濡れた制服の匂いまで、やけに鮮明に残った。", type: "dokidoki" },
+      { title: "そうまくんとゲームする！", text: "ドキドキ恋愛風の妄想文がここに入ります。" },
+      { title: "そうまくんと映画を見る！", text: "青春っぽい妄想文がここに入ります。" }
     ];
 
     function generateIndex(name, max) {
@@ -170,55 +92,11 @@
         alert("名前を入力してね！");
         return;
       }
-
       const index = generateIndex(name, results.length);
       const result = results[index];
 
-      const resultEl = document.getElementById("result");
-      const fantasyEl = document.getElementById("fantasy");
-
-      resultEl.innerText = `${name}さんの今日の診断は…\n${result.title}`;
-      fantasyEl.innerText = result.text;
-
-      if (result.type === "dokidoki") {
-        fantasyEl.style.color = "#e91e63";
-      } else {
-        fantasyEl.style.color = "#3f51b5";
-      }
-
-      // フェードインのアニメーションを付け直す
-      resultEl.classList.remove("fade-in");
-      fantasyEl.classList.remove("fade-in");
-      void resultEl.offsetWidth; // 再適用用
-      resultEl.classList.add("fade-in");
-      fantasyEl.classList.add("fade-in");
-
-      document.getElementById("retry").style.display = "inline-block";
-
-      // 💖診断時にハートを大量生成
-      for (let i = 0; i < 20; i++) {
-        setTimeout(createHeart, i * 200);
-      }
-    }
-
-    function retry() {
-      diagnose();
-    }
-
-    function createHeart() {
-      const heart = document.createElement("div");
-      heart.classList.add("heart");
-      heart.innerText = "💖";
-
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.fontSize = (20 + Math.random() * 30) + "px";
-      heart.style.animationDuration = (3 + Math.random() * 3) + "s";
-
-      document.body.appendChild(heart);
-
-      setTimeout(() => {
-        heart.remove();
-      }, 7000);
+      document.getElementById("result").innerText = `${name}さんの今日の診断は… ${result.title}`;
+      document.getElementById("fantasy").innerText = result.text;
     }
   </script>
 </body>
