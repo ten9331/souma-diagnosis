@@ -2,167 +2,165 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>そうまくんとすること診断</title>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap');
-
     body {
-      font-family: 'M PLUS Rounded 1c', 'Arial', sans-serif;
-      background: #fff9e6; /* ふんわり黄色 */
-      text-align: center;
-      padding: 50px;
-      overflow: hidden;
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      background: linear-gradient(160deg, #fff8e7, #fff0d9, #fff8e7);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     h1 {
       color: #d4a017;
-      text-shadow: 2px 2px #fff;
-      font-size: 36px;  /* タイトル大きめ */
+      font-size: 42px;
+      margin-top: 40px;
+      margin-bottom: 20px;
+      font-weight: 800;
+      letter-spacing: 2px;
     }
 
     input, button {
-      padding: 12px;
-      font-size: 18px;  /* 入力ボタン文字大きめ */
-      border-radius: 8px;
-      border: 1px solid #ddd;
-      margin: 5px;
+      font-size: 20px;
+      padding: 14px 18px;
+      border-radius: 25px;
+      border: none;
+      outline: none;
+      margin: 8px;
+    }
+
+    input {
+      border: 2px solid #ffd54f;
+      text-align: center;
     }
 
     button {
-      background: #ffd966;
+      background: linear-gradient(135deg, #ffd54f, #ffca28);
+      color: white;
+      font-weight: bold;
       cursor: pointer;
-      transition: 0.3s;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
     button:hover {
-      background: #ffec99;
+      background: linear-gradient(135deg, #ffca28, #ffc107);
+      transform: translateY(-2px);
     }
 
-    /* 吹き出しスタイル */
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
     .result {
-      display: inline-block;
-      max-width: 80%;
-      margin-top: 20px;
-      padding: 20px 24px;
-      background: #fff;
-      border-radius: 15px;
-      box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
-      font-size: 20px;   /* 吹き出し文字大きめ */
-      line-height: 1.8;  /* 読みやすい行間 */
-      position: relative;
+      background: white;
+      padding: 28px;
+      border-radius: 20px;
+      font-size: 22px;
+      line-height: 1.8;
+      margin-top: 30px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      max-width: 90%;
+      text-align: center;
       animation: fadeIn 1s ease;
-      text-align: left;
     }
 
-    .result::after {
-      content: "";
-      position: absolute;
-      bottom: -15px;
-      left: 30px;
-      border-width: 15px 15px 0;
-      border-style: solid;
-      border-color: #fff transparent transparent transparent;
+    .result strong {
+      font-size: 24px;
+      color: #d4a017;
+    }
+
+    .result em {
+      color: #555;
+      font-style: italic;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* シャボン玉 */
+    /* シャボン玉エフェクト */
     .bubble {
       position: absolute;
-      bottom: -50px;
-      background: rgba(255, 255, 255, 0.6);
+      bottom: -100px;
+      background: rgba(255, 255, 255, 0.5);
       border-radius: 50%;
-      animation: rise 10s infinite ease-in;
+      animation: rise 20s infinite ease-in;
     }
 
     @keyframes rise {
       from { transform: translateY(0) scale(1); opacity: 1; }
-      to { transform: translateY(-1000px) scale(1.5); opacity: 0; }
-    }
-
-    /* 📱 スマホ向けサイズアップ調整 */
-    @media screen and (max-width: 600px) {
-      h1 {
-        font-size: 42px; /* タイトルもっと大きく */
-      }
-
-      input, button {
-        font-size: 20px; /* 入力欄とボタンを見やすく */
-        padding: 16px;   /* タップしやすい大きさ */
-      }
-
-      .result {
-        font-size: 22px; /* 吹き出し文字さらに大きく */
-        line-height: 2;  /* 読みやすい間隔 */
-        padding: 24px;   /* 吹き出し余白も広めに */
-      }
+      to { transform: translateY(-120vh) scale(1.5); opacity: 0; }
     }
   </style>
 </head>
 <body>
   <h1>そうまくんとすること診断</h1>
-  <input type="text" id="nameInput" placeholder="あなたの名前を入れてね">
-  <button onclick="showResult()">診断する</button>
-  <div id="result" class="result"></div>
+  <div class="container">
+    <input type="text" id="nameInput" placeholder="あなたの名前を入力してね">
+    <button onclick="diagnose()">診断する</button>
+    <div class="result" id="result"></div>
+  </div>
 
   <script>
-    // シナリオ付き診断リスト
-    const activities = [
-      { title: "カフェでゆったりする", scene: "窓際でコーヒーを飲みながら『落ち着くね』って笑い合ってるかも☕️" },
-      { title: "公園を散歩する", scene: "落ち葉を踏みながら『こっち行ってみよう』って寄り道してるかも🍂" },
-      { title: "カラオケで盛り上がる", scene: "そうまくんがノリノリで歌って、マイクを取り合いっこしてるかも🎤" },
-      { title: "ゲームで対戦する", scene: "『負けないから！』って言いながら、真剣にコントローラーを握ってるかも🎮" },
-      { title: "ボードゲームを楽しむ", scene: "ダイスを振って『出た！』って盛り上がってる姿が浮かぶかも🎲" },
-      { title: "映画を見る", scene: "ドキドキシーンで『ちょっと怖い？』って小声で話しかけてくれるかも🎬" },
-      { title: "ショッピングに行く", scene: "『これ似合うんじゃない？』って一緒に服を選んでくれるかも🛍" },
-      { title: "ラーメンを食べに行く", scene: "『熱いから気をつけて！』って笑いながらズルズル食べてるかも🍜" },
-      { title: "スポーツ観戦する", scene: "応援の声を合わせて『いけー！』って盛り上がってるかも⚽️" },
-      { title: "花火を見る", scene: "夜空を見上げながら『きれいだね』って微笑んでるかも🎆" },
-      { title: "夏祭りに行く", scene: "浴衣姿で屋台をまわって『どれ食べる？』って楽しんでるかも🍧" },
-      { title: "勉強会をする", scene: "『ここ教えて！』ってノートを見せ合っているかも📖" },
-      { title: "ケーキを食べる", scene: "『これ美味しい！』ってフォークで一口交換してるかも🍰" },
-      { title: "絵を描きあう", scene: "『似てるかな？』って笑い合いながら一緒にスケッチしてるかも🎨" },
-      { title: "デュエットする", scene: "『ハモろう！』って一緒に声を合わせて楽しんでるかも🎶" },
-      { title: "旅行を計画する", scene: "地図を広げながら『ここも行きたい！』って盛り上がってるかも🗺" },
-      { title: "一緒に写真を撮る", scene: "『変顔する？』って笑いながらシャッターを押してるかも📸" },
-      { title: "お家でゴロゴロする", scene: "『動きたくないね〜』って一緒にクッションに埋もれてるかも🛋" },
-      { title: "推し活を語る", scene: "『これも最高なんだよ！』って熱く語り合ってるかも💖" },
-      { title: "サプライズをもらう", scene: "『実はこれ…！』って照れながらプレゼントを渡してくれるかも🎁" }
+    const results = [
+      { main: "映画鑑賞", sub: "そうまくんと<em>映画を見ながらポップコーンをシェア</em>してるかも！『このシーンやばいね！』って笑い合ってるよ🍿" },
+      { main: "お散歩", sub: "そうまくんと<em>公園をのんびりお散歩</em>。『リス見つけた！』なんて子供みたいに楽しんでるよ🌳" },
+      { main: "カフェ巡り", sub: "そうまくんと<em>おしゃれカフェでパンケーキ</em>。『これインスタ映えする！』ってはしゃいでるよ☕🍰" },
+      { main: "ゲーム", sub: "そうまくんと<em>ゲーム対戦</em>。『俺の勝ち！』ってどや顔されるけど最後は笑ってるよ🎮" },
+      { main: "お絵描き", sub: "そうまくんと<em>絵を描きながら微笑み合い</em>。『上手に描けたね！』って褒めてくれるよ🎨" },
+      { main: "ゴロゴロ", sub: "そうまくんと<em>クッションに埋もれてゴロゴロ</em>。『動きたくないね〜』って幸せな時間だよ🛋️" }
     ];
 
-    function showResult() {
+    function diagnose() {
       const name = document.getElementById("nameInput").value;
       if (!name) {
-        alert("名前を入れてね！");
+        document.getElementById("result").innerHTML = "名前を入力してね！";
         return;
       }
       const today = new Date();
-      const seed = name.length + today.getFullYear() + today.getMonth() + today.getDate();
-      const index = seed % activities.length;
-
-      const activity = activities[index];
-      const resultBox = document.getElementById("result");
-      resultBox.innerHTML = `そうまくんと<b>${activity.title}</b>よ！<br>${activity.scene}`;
+      const seed = today.getFullYear() + today.getMonth() + today.getDate() + name;
+      const index = Math.abs(hashCode(seed)) % results.length;
+      const resultText = results[index];
+      document.getElementById("result").innerHTML = 
+        `そうまくんと<strong>${resultText.main}</strong>するよ！<br>${resultText.sub}`;
     }
 
-    // シャボン玉生成
-    function createBubble() {
-      const bubble = document.createElement("div");
-      bubble.classList.add("bubble");
-      const size = Math.random() * 40 + 10; 
-      bubble.style.width = size + "px";
-      bubble.style.height = size + "px";
-      bubble.style.left = Math.random() * window.innerWidth + "px";
-      bubble.style.animationDuration = (Math.random() * 5 + 5) + "s";
-      document.body.appendChild(bubble);
-
-      setTimeout(() => {
-        bubble.remove();
-      }, 10000);
+    function hashCode(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      return hash;
     }
-    setInterval(createBubble, 500);
+
+    // シャボン玉をランダムに生成
+    function createBubbles() {
+      for (let i = 0; i < 15; i++) {
+        const bubble = document.createElement("div");
+        bubble.classList.add("bubble");
+        const size = Math.random() * 40 + 10;
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        bubble.style.left = `${Math.random() * 100}vw`;
+        bubble.style.animationDuration = `${10 + Math.random() * 10}s`;
+        document.body.appendChild(bubble);
+      }
+    }
+    createBubbles();
   </script>
 </body>
 </html>
