@@ -81,6 +81,24 @@
       from { transform: translateY(0) scale(1); opacity: 1; }
       to { transform: translateY(-1000px) scale(1.5); opacity: 0; }
     }
+
+    /* 📱 スマホ向けサイズアップ調整 */
+    @media screen and (max-width: 600px) {
+      h1 {
+        font-size: 42px; /* タイトルもっと大きく */
+      }
+
+      input, button {
+        font-size: 20px; /* 入力欄とボタンを見やすく */
+        padding: 16px;   /* タップしやすい大きさ */
+      }
+
+      .result {
+        font-size: 22px; /* 吹き出し文字さらに大きく */
+        line-height: 2;  /* 読みやすい間隔 */
+        padding: 24px;   /* 吹き出し余白も広めに */
+      }
+    }
   </style>
 </head>
 <body>
