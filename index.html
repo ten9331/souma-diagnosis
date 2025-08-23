@@ -2,165 +2,217 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>そうまくんとすること診断</title>
-  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;900&display=swap" rel="stylesheet">
+  <title>そうまくんと〇〇診断</title>
   <style>
     body {
-      font-family: 'M PLUS Rounded 1c', sans-serif;
-      background: linear-gradient(160deg, #fff8e7, #fff0d9, #fff8e7);
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      font-family: "Yu Gothic", sans-serif;
+      text-align: center;
+      background: #fff0f5;
+      padding: 40px;
+      overflow: hidden;
     }
 
     h1 {
-      color: #d4a017;
-      font-size: 42px;
-      margin-top: 40px;
+      color: #ff4081;
       margin-bottom: 20px;
-      font-weight: 800;
-      letter-spacing: 2px;
+      position: relative;
+      z-index: 2;
     }
 
-    input, button {
-      font-size: 20px;
-      padding: 14px 18px;
-      border-radius: 25px;
-      border: none;
-      outline: none;
-      margin: 8px;
+    .input-area {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 20px;
     }
 
     input {
-      border: 2px solid #ffd54f;
-      text-align: center;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      z-index: 2;
+      position: relative;
     }
 
     button {
-      background: linear-gradient(135deg, #ffd54f, #ffca28);
+      padding: 12px 24px;
+      font-size: 18px;
+      border: none;
+      background: #ff80ab;
       color: white;
-      font-weight: bold;
+      border-radius: 8px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: 0.3s;
+      z-index: 2;
+      position: relative;
+      margin-top: 10px;
     }
+
     button:hover {
-      background: linear-gradient(135deg, #ffca28, #ffc107);
-      transform: translateY(-2px);
+      background: #ff4081;
     }
 
-    .container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      padding: 20px;
-      box-sizing: border-box;
+    #result {
+      font-size: 28px;
+      margin-top: 40px;
+      margin-bottom: 15px;
+      z-index: 2;
+      position: relative;
+      opacity: 0;
     }
 
-    .result {
-      background: white;
-      padding: 28px;
-      border-radius: 20px;
-      font-size: 22px;
+    #fantasy {
+      font-size: 20px;
+      white-space: pre-line;
       line-height: 1.8;
-      margin-top: 30px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-      max-width: 90%;
-      text-align: center;
-      animation: fadeIn 1s ease;
+      max-width: 600px;
+      margin: 0 auto;
+      z-index: 2;
+      position: relative;
+      opacity: 0;
     }
 
-    .result strong {
-      font-size: 24px;
-      color: #d4a017;
-    }
-
-    .result em {
-      color: #555;
-      font-style: italic;
+    /* フェードインアニメーション */
+    .fade-in {
+      animation: fadeIn 1s ease forwards;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
 
-    /* シャボン玉エフェクト */
-    .bubble {
+    /* 飾りの星・ひまわり */
+    .floating {
       position: absolute;
-      bottom: -100px;
-      background: rgba(255, 255, 255, 0.5);
-      border-radius: 50%;
-      animation: rise 20s infinite ease-in;
+      animation: floatAround 6s infinite ease-in-out alternate;
+      pointer-events: none;
+      font-size: 24px;
+      opacity: 0.8;
     }
 
-    @keyframes rise {
-      from { transform: translateY(0) scale(1); opacity: 1; }
-      to { transform: translateY(-120vh) scale(1.5); opacity: 0; }
+    @keyframes floatAround {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-20px) rotate(360deg); }
+    }
+
+    /* ハート */
+    .heart {
+      position: absolute;
+      font-size: 24px;
+      opacity: 0.7;
+      animation: floatUp linear forwards;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-120vh) scale(1.5);
+        opacity: 0;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>そうまくんとすること診断</h1>
-  <div class="container">
-    <input type="text" id="nameInput" placeholder="あなたの名前を入力してね">
-    <button onclick="diagnose()">診断する</button>
-    <div class="result" id="result"></div>
+  <h1>そうまくんと〇〇診断</h1>
+
+  <!-- 入力エリア（星とひまわり付き） -->
+  <div class="input-area">
+    <input type="text" id="username" placeholder="名前を入力してね">
+    <div class="floating" style="top:-30px; left:-40px;">⭐</div>
+    <div class="floating" style="top:-20px; right:-40px;">🌻</div>
+    <div class="floating" style="bottom:-30px; left:-30px;">⭐</div>
+    <div class="floating" style="bottom:-20px; right:-30px;">🌻</div>
+  </div>
+  <br>
+  <button onclick="diagnose()">診断する！</button>
+
+  <div id="result-area">
+    <h2 id="result"></h2>
+    <p id="fantasy"></p>
+    <button id="retry" style="display:none;" onclick="retry()">もう一度診断する</button>
   </div>
 
   <script>
     const results = [
-      { main: "映画鑑賞", sub: "そうまくんと<em>映画を見ながらポップコーンをシェア</em>してるかも！『このシーンやばいね！』って笑い合ってるよ🍿" },
-      { main: "お散歩", sub: "そうまくんと<em>公園をのんびりお散歩</em>。『リス見つけた！』なんて子供みたいに楽しんでるよ🌳" },
-      { main: "カフェ巡り", sub: "そうまくんと<em>おしゃれカフェでパンケーキ</em>。『これインスタ映えする！』ってはしゃいでるよ☕🍰" },
-      { main: "ゲーム", sub: "そうまくんと<em>ゲーム対戦</em>。『俺の勝ち！』ってどや顔されるけど最後は笑ってるよ🎮" },
-      { main: "お絵描き", sub: "そうまくんと<em>絵を描きながら微笑み合い</em>。『上手に描けたね！』って褒めてくれるよ🎨" },
-      { main: "ゴロゴロ", sub: "そうまくんと<em>クッションに埋もれてゴロゴロ</em>。『動きたくないね〜』って幸せな時間だよ🛋️" }
+      { title: "そうまくんとゲームする！", text: "勝負に負けて拗ねていたら、そうまくんが頭をぽんっと撫でてきた。\n『次は本気出していい？』って挑発するみたいに笑う顔が近い。\n視線を逸らしたのに、鼓動の速さまでは隠せなかった。", type: "dokidoki" },
+      { title: "そうまくんと映画を見る！", text: "暗い館内でこっそり横顔を盗み見た。\nスクリーンの光に照らされて、視線が一瞬だけ重なる。\n『なに？』と囁かれて、心臓が勝手に跳ね上がった。", type: "seishun" },
+      // ...（20個すべて）
     ];
 
+    function generateIndex(name, max) {
+      const today = new Date();
+      const dateStr = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
+      const key = name + dateStr;
+
+      let hash = 0;
+      for (let i = 0; i < key.length; i++) {
+        hash = (hash << 5) - hash + key.charCodeAt(i);
+        hash |= 0;
+      }
+      return Math.abs(hash) % max;
+    }
+
     function diagnose() {
-      const name = document.getElementById("nameInput").value;
+      const name = document.getElementById("username").value.trim();
       if (!name) {
-        document.getElementById("result").innerHTML = "名前を入力してね！";
+        alert("名前を入力してね！");
         return;
       }
-      const today = new Date();
-      const seed = today.getFullYear() + today.getMonth() + today.getDate() + name;
-      const index = Math.abs(hashCode(seed)) % results.length;
-      const resultText = results[index];
-      document.getElementById("result").innerHTML = 
-        `そうまくんと<strong>${resultText.main}</strong>するよ！<br>${resultText.sub}`;
+
+      const index = generateIndex(name, results.length);
+      const result = results[index];
+
+      const resultEl = document.getElementById("result");
+      const fantasyEl = document.getElementById("fantasy");
+
+      resultEl.innerText = `${name}さんの今日の診断は…\n${result.title}`;
+      fantasyEl.innerText = result.text;
+
+      if (result.type === "dokidoki") {
+        fantasyEl.style.color = "#e91e63";
+      } else {
+        fantasyEl.style.color = "#3f51b5";
+      }
+
+      // フェードインのアニメーションを付け直す
+      resultEl.classList.remove("fade-in");
+      fantasyEl.classList.remove("fade-in");
+      void resultEl.offsetWidth; // 再適用用
+      resultEl.classList.add("fade-in");
+      fantasyEl.classList.add("fade-in");
+
+      document.getElementById("retry").style.display = "inline-block";
+
+      // 💖診断時にハートを大量生成
+      for (let i = 0; i < 20; i++) {
+        setTimeout(createHeart, i * 200);
+      }
     }
 
-    function hashCode(str) {
-      let hash = 0;
-      for (let i = 0; i < str.length; i++) {
-        hash = str.charCodeAt(i) + ((hash << 5) - hash);
-      }
-      return hash;
+    function retry() {
+      diagnose();
     }
 
-    // シャボン玉をランダムに生成
-    function createBubbles() {
-      for (let i = 0; i < 15; i++) {
-        const bubble = document.createElement("div");
-        bubble.classList.add("bubble");
-        const size = Math.random() * 40 + 10;
-        bubble.style.width = `${size}px`;
-        bubble.style.height = `${size}px`;
-        bubble.style.left = `${Math.random() * 100}vw`;
-        bubble.style.animationDuration = `${10 + Math.random() * 10}s`;
-        document.body.appendChild(bubble);
-      }
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.innerText = "💖";
+
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = (20 + Math.random() * 30) + "px";
+      heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 7000);
     }
-    createBubbles();
   </script>
 </body>
 </html>
