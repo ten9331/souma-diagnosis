@@ -1,5 +1,3 @@
-# souma-diagnosis
-souma-diagnosis
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -18,7 +16,7 @@ souma-diagnosis
       align-items: center;
       background: linear-gradient(135deg, #fff9c4 0%, #ffe082 100%);
       color: #444;
-      overflow: hidden; /* 背景アニメ用 */
+      overflow: hidden;
     }
     h1 {
       font-size: 2.5rem;
@@ -71,8 +69,6 @@ souma-diagnosis
       opacity: 1;
       transform: scale(1.05);
     }
-
-    /* 星やハート用 */
     .floating {
       position: absolute;
       font-size: 20px;
@@ -99,18 +95,15 @@ souma-diagnosis
     <button onclick="showResult()">診断する</button>
   </div>
   <div id="result"></div>
-
   <script>
     function showResult() {
       const name = document.getElementById("nameInput").value;
       const resultBox = document.getElementById("result");
-
       if (!name) {
         resultBox.textContent = "名前を入力してください！";
         resultBox.classList.add("show");
         return;
       }
-
       const activities = [
         "一緒にカフェでゆったりする",
         "公園を散歩する",
@@ -133,44 +126,27 @@ souma-diagnosis
         "推し活を語る",
         "サプライズをもらう"
       ];
-
       const today = new Date();
       const dateString = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
       let hash = 0;
-      const combined = name + dateString;
-      for (let i = 0; i < combined.length; i++) {
-        hash += combined.charCodeAt(i);
-      }
+      for (let char of (name + dateString)) hash += char.charCodeAt(0);
       const index = hash % activities.length;
       const activity = activities[index];
-
       resultBox.textContent = `${name}さんの今日の診断結果は…「そうまくんと${activity}」です！`;
-      
-      // 結果をふわっと表示
       resultBox.classList.remove("show");
       setTimeout(() => resultBox.classList.add("show"), 50);
-
-      // 星やハートを生成
-      for (let i = 0; i < 10; i++) {
-        createFloatingSymbol();
-      }
+      for (let i = 0; i < 10; i++) createFloatingSymbol();
     }
-
     function createFloatingSymbol() {
       const symbols = ["⭐", "✨", "🌼", "💛", "💫"];
       const symbol = symbols[Math.floor(Math.random() * symbols.length)];
-      
       const span = document.createElement("span");
       span.classList.add("floating");
       span.textContent = symbol;
       span.style.left = Math.random() * 100 + "vw";
       span.style.fontSize = (20 + Math.random() * 20) + "px";
       document.body.appendChild(span);
-
-      // アニメーション終了後に削除
-      setTimeout(() => {
-        span.remove();
-      }, 6000);
+      setTimeout(() => span.remove(), 6000);
     }
   </script>
 </body>
