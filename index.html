@@ -5,169 +5,143 @@
   <title>そうまくんとすること診断</title>
   <style>
     body {
-      font-family: 'Hiragino Maru Gothic Pro', 'Arial Rounded MT Bold', sans-serif;
+      font-family: 'Arial', sans-serif;
+      background: #fff9e6; /* ふんわり黄色 */
       text-align: center;
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(135deg, #fff9c4 0%, #ffe082 100%);
-      color: #444;
+      padding: 50px;
       overflow: hidden;
-      position: relative;
     }
+
     h1 {
-      font-size: 2.3rem;
-      margin-bottom: 20px;
-      color: #6d4c41;
-      text-shadow: 2px 2px 6px rgba(255, 245, 157, 0.9);
-      z-index: 2;
+      color: #d4a017;
+      text-shadow: 2px 2px #fff;
     }
+
     input, button {
-      position: relative;
-      z-index: 2;
-    }
-    input {
-      padding: 12px;
+      padding: 10px;
       font-size: 16px;
-      border: 2px solid #fdd835;
-      border-radius: 20px;
-      margin-right: 10px;
-      outline: none;
-      box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      margin: 5px;
     }
+
     button {
-      padding: 12px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 20px;
-      background: #ffca28;
-      color: white;
-      font-weight: bold;
+      background: #ffd966;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.3s;
-      box-shadow: 2px 4px 10px rgba(255, 202, 40, 0.6);
+      transition: 0.3s;
     }
     button:hover {
-      transform: scale(1.05);
-      box-shadow: 4px 6px 15px rgba(255, 202, 40, 0.8);
+      background: #ffec99;
     }
-    /* LINE風の吹き出し */
-    #result {
-      max-width: 70%;
-      margin-top: 30px;
-      padding: 15px 20px;
-      border-radius: 15px;
-      background: #dcf8c6;
-      color: #333;
-      text-align: left;
-      font-size: 18px;
-      font-weight: 500;
-      line-height: 1.4;
+
+    /* 吹き出しスタイル */
+    .result {
       display: inline-block;
-      opacity: 0;
-      transform: scale(0.9);
-      transition: opacity 0.6s ease, transform 0.4s ease;
+      max-width: 80%;
+      margin-top: 20px;
+      padding: 15px 20px;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+      font-size: 18px;
+      line-height: 1.5;
       position: relative;
-      z-index: 2;
+      animation: fadeIn 1s ease;
+      text-align: left;
     }
-    #result::after {
+
+    .result::after {
       content: "";
       position: absolute;
-      left: -10px;
-      top: 15px;
-      border: 10px solid transparent;
-      border-right-color: #dcf8c6;
+      bottom: -15px;
+      left: 30px;
+      border-width: 15px 15px 0;
+      border-style: solid;
+      border-color: #fff transparent transparent transparent;
     }
-    #result.show {
-      opacity: 1;
-      transform: scale(1);
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    /* 星やハート */
-    .floating {
-      position: absolute;
-      font-size: 20px;
-      animation: floatUp 6s linear forwards;
-      opacity: 0.8;
-      z-index: 1;
-    }
-    @keyframes floatUp {
-      0% { transform: translateY(100vh) scale(0.5); opacity: 1; }
-      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
-    }
+
     /* シャボン玉 */
     .bubble {
       position: absolute;
+      bottom: -50px;
+      background: rgba(255, 255, 255, 0.6);
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
-      animation: bubbleUp 12s linear infinite;
-      pointer-events: none;
-      z-index: 0;
+      animation: rise 10s infinite ease-in;
     }
-    @keyframes bubbleUp {
-      0% { transform: translateY(100vh) scale(0.6); opacity: 0.5; }
-      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+
+    @keyframes rise {
+      from { transform: translateY(0) scale(1); opacity: 1; }
+      to { transform: translateY(-1000px) scale(1.5); opacity: 0; }
     }
   </style>
 </head>
 <body>
   <h1>そうまくんとすること診断</h1>
-  <div>
-    <input type="text" id="nameInput" placeholder="あなたの名前を入力">
-    <button onclick="showResult()">診断する</button>
-  </div>
-  <div id="result"></div>
+  <input type="text" id="nameInput" placeholder="あなたの名前を入れてね">
+  <button onclick="showResult()">診断する</button>
+  <div id="result" class="result"></div>
+
   <script>
+    // シナリオ付き診断リスト
+    const activities = [
+      { title: "カフェでゆったりする", scene: "窓際でコーヒーを飲みながら『落ち着くね』って笑い合ってるかも☕️" },
+      { title: "公園を散歩する", scene: "落ち葉を踏みながら『こっち行ってみよう』って寄り道してるかも🍂" },
+      { title: "カラオケで盛り上がる", scene: "そうまくんがノリノリで歌って、マイクを取り合いっこしてるかも🎤" },
+      { title: "ゲームで対戦する", scene: "『負けないから！』って言いながら、真剣にコントローラーを握ってるかも🎮" },
+      { title: "ボードゲームを楽しむ", scene: "ダイスを振って『出た！』って盛り上がってる姿が浮かぶかも🎲" },
+      { title: "映画を見る", scene: "ドキドキシーンで『ちょっと怖い？』って小声で話しかけてくれるかも🎬" },
+      { title: "ショッピングに行く", scene: "『これ似合うんじゃない？』って一緒に服を選んでくれるかも🛍" },
+      { title: "ラーメンを食べに行く", scene: "『熱いから気をつけて！』って笑いながらズルズル食べてるかも🍜" },
+      { title: "スポーツ観戦する", scene: "応援の声を合わせて『いけー！』って盛り上がってるかも⚽️" },
+      { title: "花火を見る", scene: "夜空を見上げながら『きれいだね』って微笑んでるかも🎆" },
+      { title: "夏祭りに行く", scene: "浴衣姿で屋台をまわって『どれ食べる？』って楽しんでるかも🍧" },
+      { title: "勉強会をする", scene: "『ここ教えて！』ってノートを見せ合っているかも📖" },
+      { title: "ケーキを食べる", scene: "『これ美味しい！』ってフォークで一口交換してるかも🍰" },
+      { title: "絵を描きあう", scene: "『似てるかな？』って笑い合いながら一緒にスケッチしてるかも🎨" },
+      { title: "デュエットする", scene: "『ハモろう！』って一緒に声を合わせて楽しんでるかも🎶" },
+      { title: "旅行を計画する", scene: "地図を広げながら『ここも行きたい！』って盛り上がってるかも🗺" },
+      { title: "一緒に写真を撮る", scene: "『変顔する？』って笑いながらシャッターを押してるかも📸" },
+      { title: "お家でゴロゴロする", scene: "『動きたくないね〜』って一緒にクッションに埋もれてるかも🛋" },
+      { title: "推し活を語る", scene: "『これも最高なんだよ！』って熱く語り合ってるかも💖" },
+      { title: "サプライズをもらう", scene: "『実はこれ…！』って照れながらプレゼントを渡してくれるかも🎁" }
+    ];
+
     function showResult() {
       const name = document.getElementById("nameInput").value;
-      const resultBox = document.getElementById("result");
       if (!name) {
-        resultBox.textContent = "名前を入力してください！";
-        resultBox.classList.add("show");
+        alert("名前を入れてね！");
         return;
       }
-      const activities = [
-        "一緒にカフェでゆったりする","公園を散歩する","カラオケで盛り上がる",
-        "ゲームで対戦する","ボードゲームを楽しむ","映画を見る","ショッピングに行く",
-        "ラーメンを食べに行く","スポーツ観戦する","花火を見る","夏祭りに行く",
-        "勉強会をする","ケーキを食べる","絵を描きあう","デュエットする",
-        "旅行を計画する","一緒に写真を撮る","お家でゴロゴロする","推し活を語る","サプライズをもらう"
-      ];
       const today = new Date();
-      const dateString = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
-      let hash = 0;
-      for (let char of (name + dateString)) hash += char.charCodeAt(0);
-      const index = hash % activities.length;
+      const seed = name.length + today.getFullYear() + today.getMonth() + today.getDate();
+      const index = seed % activities.length;
+
       const activity = activities[index];
-      resultBox.textContent = `そうまくんと${activity}`;
-      resultBox.classList.remove("show");
-      setTimeout(() => resultBox.classList.add("show"), 50);
-      for (let i = 0; i < 10; i++) createFloatingSymbol();
+      const resultBox = document.getElementById("result");
+      resultBox.innerHTML = `そうまくんと<b>${activity.title}</b>よ！<br>${activity.scene}`;
     }
-    function createFloatingSymbol() {
-      const symbols = ["⭐","✨","🌼","💛","💫"];
-      const span = document.createElement("span");
-      span.classList.add("floating");
-      span.textContent = symbols[Math.floor(Math.random()*symbols.length)];
-      span.style.left = Math.random()*100 + "vw";
-      span.style.fontSize = (20+Math.random()*20) + "px";
-      document.body.appendChild(span);
-      setTimeout(() => span.remove(), 6000);
-    }
-    // シャボン玉を定期的に生成
-    setInterval(() => {
+
+    // シャボン玉生成
+    function createBubble() {
       const bubble = document.createElement("div");
       bubble.classList.add("bubble");
-      const size = 20 + Math.random()*40;
+      const size = Math.random() * 40 + 10; 
       bubble.style.width = size + "px";
       bubble.style.height = size + "px";
-      bubble.style.left = Math.random()*100 + "vw";
+      bubble.style.left = Math.random() * window.innerWidth + "px";
+      bubble.style.animationDuration = (Math.random() * 5 + 5) + "s";
       document.body.appendChild(bubble);
-      setTimeout(() => bubble.remove(), 12000);
-    }, 1000);
+
+      setTimeout(() => {
+        bubble.remove();
+      }, 10000);
+    }
+    setInterval(createBubble, 500);
   </script>
 </body>
 </html>
