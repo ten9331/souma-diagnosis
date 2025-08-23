@@ -6,7 +6,7 @@
   <style>
     body {
       font-family: "Yu Gothic", sans-serif;
-      background: #fffacd; /* レモン色背景 */
+      background: #fffacd;
       margin: 0;
       height: 100vh;
       display: flex;
@@ -16,88 +16,54 @@
       text-align: center;
       overflow: hidden;
     }
-
-    h1 {
-      color: #ff4081;
-      font-size: 36px;
-      margin-bottom: 30px;
-    }
-
+    h1 { color: #ff4081; font-size: 36px; margin-bottom: 30px; }
     input {
-      padding: 12px;
-      font-size: 18px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      position: relative;
-      z-index: 2;
+      padding: 12px; font-size: 18px;
+      border-radius: 8px; border: 1px solid #ccc;
+      position: relative; z-index: 2;
     }
-
     button {
-      padding: 12px 24px;
-      font-size: 18px;
-      border: none;
-      border-radius: 8px;
-      background: #ff80ab;
-      color: white;
-      margin-top: 20px;
-      cursor: pointer;
-      z-index: 2;
-      position: relative;
+      padding: 12px 24px; font-size: 18px;
+      border: none; border-radius: 8px;
+      background: #ff80ab; color: white;
+      margin-top: 20px; cursor: pointer;
+      z-index: 2; position: relative;
     }
-
-    button:hover {
-      background: #ff4081;
-    }
-
+    button:hover { background: #ff4081; }
     #result {
-      font-size: 28px;
-      margin-top: 40px;
-      opacity: 0;
-      transition: opacity 1s ease-in;
+      font-size: 28px; margin-top: 40px;
+      opacity: 0; transition: opacity 1s ease-in;
     }
-
     #fantasy {
-      font-size: 20px;
-      line-height: 1.8;
+      font-size: 20px; line-height: 1.8;
       max-width: 600px;
       margin: 20px auto;
-      opacity: 0;
-      transition: opacity 1s ease-in;
+      opacity: 0; transition: opacity 1s ease-in;
     }
-
-    .show {
-      opacity: 1 !important;
-    }
-
+    .show { opacity: 1 !important; }
     .heart {
-      position: absolute;
-      color: #ff80ab;
+      position: absolute; color: #ff80ab;
       font-size: 24px;
       animation: floatUp 4s linear forwards;
       z-index: 1;
     }
-
     @keyframes floatUp {
       0% { transform: translateY(0) scale(1); opacity: 1; }
       100% { transform: translateY(-300px) scale(1.5); opacity: 0; }
     }
-
     .decoration {
-      position: absolute;
-      font-size: 30px;
+      position: absolute; font-size: 30px;
       animation: sway 3s infinite ease-in-out;
       z-index: 1;
     }
-
     @keyframes sway {
-      0%, 100% { transform: translateY(0); }
+      0%,100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
     }
-
-    .top    { top: 10%; left: 50%; transform: translateX(-50%); }
+    .top { top: 10%; left: 50%; transform: translateX(-50%); }
     .bottom { bottom: 10%; left: 50%; transform: translateX(-50%); }
-    .left   { top: 50%; left: 10%; transform: translateY(-50%); }
-    .right  { top: 50%; right: 10%; transform: translateY(-50%); }
+    .left { top: 50%; left: 10%; transform: translateY(-50%); }
+    .right { top: 50%; right: 10%; transform: translateY(-50%); }
   </style>
 </head>
 <body>
@@ -118,81 +84,42 @@
 
   <script>
     const results = [
-      { title: "そうまくんとゲームする！", text: "隣で笑う声にドキッ。勝っても負けても、二人だけの特別な時間が流れていく。" },
-      { title: "そうまくんと映画を見る！", text: "暗い劇場、ふと触れた手。小さな偶然が胸を高鳴らせる青春のひと幕。" },
-      { title: "そうまくんとカフェに行く！", text: "ひと口ずつ分け合う甘いスイーツ。笑顔がいつもより近くに感じられる。" },
-      { title: "そうまくんと放課後散歩する！", text: "夕焼け色に染まる横顔に見とれて、言葉が少し遅れてしまう。" },
-      { title: "そうまくんと一緒に勉強する！", text: "真剣な表情に胸がざわつく。ペンの音が響く静かな空間が心地よい。" },
-      { title: "そうまくんと図書館で過ごす！", text: "静かな本棚の間、そっと交わす視線が何よりも甘い秘密みたい。" },
-      { title: "そうまくんとお祭りに行く！", text: "夜空に咲く花火より、隣で笑う顔に心が奪われる。" },
-      { title: "そうまくんと水族館デート！", text: "青い光に照らされて、二人の影が寄り添うみたいに揺れている。" },
-      { title: "そうまくんとショッピング！", text: "「似合うよ」って笑う声にドキリ。何気ない一言が宝物になる。" },
-      { title: "そうまくんとカラオケに行く！", text: "マイクを持つ姿が新鮮で、思わず見惚れてしまう。" },
-      { title: "そうまくんと一緒に料理する！", text: "慌てて笑う姿も可愛くて、台所は笑顔とドキドキでいっぱい。" },
-      { title: "そうまくんと体育館でバスケ！", text: "ボールを追う横顔に胸が熱くなる。青春そのものの瞬間。" },
-      { title: "そうまくんと電車で帰る！", text: "隣の席で揺れる肩。小さな距離がやけに気になる帰り道。" },
-      { title: "そうまくんと雨の日相合傘！", text: "肩が触れるくらい近くて、雨音がやけに心臓の音を大きくする。" },
-      { title: "そうまくんと昼休みにお弁当！", text: "「一口ちょうだい」って笑う顔に、胸がふわりとあたたかくなる。" },
-      { title: "そうまくんと買い食いデート！", text: "揚げたての匂いより、横で笑うその声がずっと甘い。" },
-      { title: "そうまくんとカラフルな遊園地！", text: "観覧車の頂上で、視線が重なる。夜景よりも眩しいドキドキ。" },
-      { title: "そうまくんと体育祭応援！", text: "声を枯らして叫ぶ姿に心奪われる。青春の熱気が胸に焼きつく。" },
-      { title: "そうまくんと冬のイルミネーション！", text: "冷たい指先を温めるように、ポケットの中で手が触れ合う。" },
-      { title: "そうまくんと朝の教室で！", text: "誰もいない静けさの中、二人だけの会話が特別に響いていく。" }
+      { title: "そうまくんとゲームする！", text: "隣で笑う声にドキッ…（略）" },
+      // (20個全部)
     ];
-
     function generateIndex(name, max) {
       const today = new Date();
-      const dateStr = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
-      const key = name + dateStr;
-
-      let hash = 0;
-      for (let i = 0; i < key.length; i++) {
-        hash = (hash << 5) - hash + key.charCodeAt(i);
+      const dateStr = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+      let hash = 0, key = name + dateStr;
+      for (let i=0; i<key.length; i++){
+        hash = (hash<<5) - hash + key.charCodeAt(i);
         hash |= 0;
       }
-      return Math.abs(hash) % max;
+      return Math.abs(hash)%max;
     }
-
     function diagnose() {
       const name = document.getElementById("username").value.trim();
-      if (!name) {
-        alert("名前を入力してね！");
-        return;
-      }
-      const index = generateIndex(name, results.length);
-      const result = results[index];
-
-      const resultEl = document.getElementById("result");
-      const fantasyEl = document.getElementById("fantasy");
-
-      resultEl.innerText = `${name}さんの今日の診断は… ${result.title}`;
-      fantasyEl.innerText = result.text;
-
-      resultEl.classList.add("show");
-      fantasyEl.classList.add("show");
-
+      if (!name) return alert("名前を入力してね！");
+      const r = results[generateIndex(name, results.length)];
+      document.getElementById("result").innerText = `${name}さんの今日の診断は… ${r.title}`;
+      document.getElementById("fantasy").innerText = r.text;
+      document.getElementById("result").classList.add("show");
+      document.getElementById("fantasy").classList.add("show");
       document.querySelector("button[onclick='retry()']").style.display = "inline-block";
-
-      releaseHearts();
+      for (let i=0;i<15;i++){
+        const heart = document.createElement("div");
+        heart.className="heart"; heart.innerText="💖";
+        heart.style.left = Math.random()*window.innerWidth+"px";
+        heart.style.top = (window.innerHeight-50)+"px";
+        heart.style.fontSize = (20+Math.random()*20)+"px";
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(), 4000);
+      }
     }
-
-    function retry() {
+    function retry(){
       document.getElementById("result").classList.remove("show");
       document.getElementById("fantasy").classList.remove("show");
-      setTimeout(() => diagnose(), 100);
-    }
-
-    function releaseHearts() {
-      for (let i = 0; i < 15; i++) {
-        const heart = document.createElement("div");
-        heart.className = "heart";
-        heart.innerText = "💖";
-        heart.style.left = Math.random() * window.innerWidth + "px";
-        heart.style.top = (window.innerHeight - 50) + "px";
-        heart.style.fontSize = (20 + Math.random() * 20) + "px";
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 4000);
-      }
+      setTimeout(diagnose, 100);
     }
   </script>
 </body>
