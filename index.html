@@ -6,7 +6,7 @@
   <style>
     body {
       font-family: "Yu Gothic", sans-serif;
-      background: #fffacd;
+      background: #fffacd; /* 薄黄色 */
       margin: 0;
       height: 100vh;
       display: flex;
@@ -15,8 +15,10 @@
       align-items: center;
       text-align: center;
       overflow: hidden;
+      position: relative;
     }
-    h1 { color: #ff4081; font-size: 36px; margin-bottom: 30px; }
+
+    h1 { color: orange; font-size: 36px; margin-bottom: 30px; }
     input {
       padding: 12px; font-size: 18px;
       border-radius: 8px; border: 1px solid #ccc;
@@ -25,14 +27,15 @@
     button {
       padding: 12px 24px; font-size: 18px;
       border: none; border-radius: 8px;
-      background: #ff80ab; color: white;
+      background: orange; color: white;
       margin-top: 20px; cursor: pointer;
       z-index: 2; position: relative;
     }
-    button:hover { background: #ff4081; }
+    button:hover { background: darkorange; }
     #result {
       font-size: 28px; margin-top: 40px;
       opacity: 0; transition: opacity 1s ease-in;
+      color: orange;
     }
     #fantasy {
       font-size: 20px; line-height: 1.8;
@@ -51,28 +54,39 @@
       0% { transform: translateY(0) scale(1); opacity: 1; }
       100% { transform: translateY(-300px) scale(1.5); opacity: 0; }
     }
-    .decoration {
-      position: absolute; font-size: 30px;
-      animation: sway 3s infinite ease-in-out;
-      z-index: 1;
+
+    /* 星 */
+    .star {
+      position: absolute;
+      font-size: 18px;
+      animation: floatStar 12s linear infinite;
+      z-index: 0;
     }
-    @keyframes sway {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+    @keyframes floatStar {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
     }
-    .top { top: 10%; left: 50%; transform: translateX(-50%); }
-    .bottom { bottom: 10%; left: 50%; transform: translateX(-50%); }
-    .left { top: 50%; left: 10%; transform: translateY(-50%); }
-    .right { top: 50%; right: 10%; transform: translateY(-50%); }
+
+    /* シャボン玉 */
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.7), rgba(255,255,255,0) 70%);
+      border: 2px solid rgba(255,255,255,0.4);
+      box-shadow: inset -5px -5px 15px rgba(173,216,230,0.5),
+                  inset 5px 5px 15px rgba(255,182,193,0.4);
+      animation: floatBubble 15s linear infinite;
+      z-index: 0;
+    }
+    @keyframes floatBubble {
+      0%   { transform: translateY(0) scale(1); opacity: 0.7; }
+      50%  { opacity: 1; }
+      100% { transform: translateY(-120vh) scale(1.3); opacity: 0; }
+    }
   </style>
 </head>
 <body>
   <h1>そうまくんと〇〇診断</h1>
-
-  <div class="decoration top">🌻</div>
-  <div class="decoration bottom">⭐</div>
-  <div class="decoration left">🌻</div>
-  <div class="decoration right">⭐</div>
 
   <input type="text" id="username" placeholder="名前を入力してね">
   <br>
@@ -143,6 +157,35 @@
       document.getElementById("fantasy").classList.remove("show");
       setTimeout(diagnose, 100);
     }
+
+    // 🌟 星とシャボン玉の生成
+    function createStars(num) {
+      for (let i = 0; i < num; i++) {
+        const star = document.createElement("div");
+        star.className = "star";
+        star.innerText = "★";
+        star.style.left = Math.random() * window.innerWidth + "px";
+        star.style.top = window.innerHeight + "px";
+        star.style.fontSize = (12 + Math.random() * 20) + "px";
+        star.style.color = Math.random() > 0.5 ? "orange" : "white";
+        star.style.animationDuration = (6 + Math.random() * 8) + "s";
+        document.body.appendChild(star);
+      }
+    }
+    function createBubbles(num) {
+      for (let i = 0; i < num; i++) {
+        const bubble = document.createElement("div");
+        bubble.className = "bubble";
+        bubble.style.left = Math.random() * window.innerWidth + "px";
+        bubble.style.top = window.innerHeight + "px";
+        const size = 20 + Math.random() * 50;
+        bubble.style.width = bubble.style.height = size + "px";
+        bubble.style.animationDuration = (8 + Math.random() * 12) + "s";
+        document.body.appendChild(bubble);
+      }
+    }
+    createStars(25);
+    createBubbles(15);
   </script>
 </body>
 </html>
