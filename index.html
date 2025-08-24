@@ -43,6 +43,14 @@
       margin: 20px auto;
       opacity: 0; transition: opacity 1s ease-in;
     }
+    #serif {
+      font-family: "Comic Sans MS", "Trebuchet MS", cursive;
+      font-size: 22px;
+      color: #ff69b4;
+      margin-top: 20px;
+      opacity: 0;
+      transition: opacity 1s ease-in;
+    }
     .show { opacity: 1 !important; }
     .heart {
       position: absolute; color: #ff80ab;
@@ -95,52 +103,58 @@
 
   <h2 id="result"></h2>
   <p id="fantasy"></p>
+  <p id="serif"></p>
+
+  <!-- 🎼 BGM -->
+  <audio id="bgm" loop>
+    <source src="bgm.mp3" type="audio/mpeg">
+  </audio>
 
   <script>
     const results = [
-      { title: "そうまくんとゲームする！", text: "一緒に画面を見つめながら、ふと手が触れてドキッ。笑い合う時間が、まるで特別な秘密みたいに感じる。" },
-      { title: "そうまくんと自転車で遠出！", text: "風を切って走る二人の影が並んで伸びる。青空の下で交わす会話に、何気ないのに心が弾む。" },
-      { title: "そうまくんとカフェに行く！", text: "カップを持つ指が少し重なって、視線が合った瞬間に胸が高鳴る。甘い香りよりも彼の笑顔に酔いそう。" },
-      { title: "そうまくんと放課後の教室！", text: "夕陽が差し込む教室で、他愛のない話に笑い合う。机に広げたノートも、なんだか輝いて見える。" },
-      { title: "そうまくんと映画を見る！", text: "暗い館内で、隣にいることを意識してしまう。小さな動作ひとつひとつに心臓が跳ねる。" },
-      { title: "そうまくんと体育館でバスケ！", text: "ボールを追いかける姿がまぶしくて、思わず応援の声が大きくなる。笑顔が眩しい青春の一コマ。" },
-      { title: "そうまくんと図書館で勉強！", text: "静かな空間に二人の呼吸だけが響く。机の下で足が触れて、視線を逸らすのに必死になる。" },
-      { title: "そうまくんと文化祭の準備！", text: "飾りつけに夢中で手が汚れても笑い合える。賑やかな時間が、思い出に刻まれていく。" },
-      { title: "そうまくんと夜道を歩く！", text: "街灯の下で肩が少し触れるたびに胸が熱くなる。夜の静けさが、気持ちを際立たせる。" },
-      { title: "そうまくんと昼休みに屋上！", text: "お弁当を分け合いながら、空を見上げる。何気ない一瞬が、青春らしい輝きに満ちている。" },
-      { title: "そうまくんと一緒に買い物！", text: "同じものを選んで笑い合ったり、意外な趣味を知ったり。距離が近づくのを感じて胸が弾む。" },
-      { title: "そうまくんと放課後に寄り道！", text: "駄菓子屋や公園、どこでも特別に変わる。笑顔が絶えない時間が続いてほしいと思う。" },
-      { title: "そうまくんと勉強会！", text: "教えてくれる横顔が近くて、心臓の音が聞こえそう。問題よりも彼に集中してしまう。" },
-      { title: "そうまくんと夏祭り！", text: "浴衣姿に少し照れながら、屋台を巡る。夜空に花火が上がって、二人の笑顔も弾ける。" },
-      { title: "そうまくんと音楽を聴く！", text: "イヤホンを片方ずつ分け合うだけでドキドキする。流れる音よりも心臓の鼓動が大きい。" },
-      { title: "そうまくんと部室で語る！", text: "夢や将来を真剣に話す横顔が、胸に焼きつく。仲間以上の絆を感じる瞬間。" },
-      { title: "そうまくんと雨宿り！", text: "肩を並べて立つだけで体温を感じる。雨音が鼓動を隠してくれるのがありがたい。" },
-      { title: "そうまくんと公園で遊ぶ！", text: "ブランコや滑り台に笑顔が絶えない。子供みたいな時間が、心を軽くしてくれる。" },
-      { title: "そうまくんと帰り道！", text: "並んで歩くだけで、言葉にできない幸せがこみあげる。夕暮れが二人を包み込む。" },
-      { title: "そうまくんと朝練！", text: "眠そうな顔も頑張る姿も全部眩しい。爽やかな朝風に、未来への希望が重なる。" }
+      { title: "そうまくんとゲームする！", 
+        text: "一緒に画面を見つめながら、ふと手が触れてドキッ。笑い合う時間が、まるで特別な秘密みたいに感じる。",
+        serif: "💛「勝ったらご褒美、ちょうだい？」" },
+      { title: "そうまくんと自転車で遠出！", 
+        text: "風を切って走る二人の影が並んで伸びる。青空の下で交わす会話に、何気ないのに心が弾む。",
+        serif: "💛「置いてかないから安心しろって」" },
+      { title: "そうまくんとカフェに行く！", 
+        text: "カップを持つ指が少し重なって、視線が合った瞬間に胸が高鳴る。甘い香りよりも彼の笑顔に酔いそう。",
+        serif: "💛「その一口、俺にもくれない？」" },
+      { title: "そうまくんと放課後の教室！", 
+        text: "夕陽が差し込む教室で、他愛のない話に笑い合う。机に広げたノートも、なんだか輝いて見える。",
+        serif: "💛「ずっと、こうしてたいな」" },
+      { title: "そうまくんと映画を見る！", 
+        text: "暗い館内で、隣にいることを意識してしまう。小さな動作ひとつひとつに心臓が跳ねる。",
+        serif: "💛「…手、繋ごっか」" },
+      { title: "そうまくんと図書館で勉強！", 
+        text: "静かな空間に二人の呼吸だけが響く。机の下で足が触れて、視線を逸らすのに必死になる。",
+        serif: "💛「集中できてる？俺のせいじゃないよな？」" },
+      { title: "そうまくんと夏祭り！", 
+        text: "浴衣姿に少し照れながら、屋台を巡る。夜空に花火が上がって、二人の笑顔も弾ける。",
+        serif: "💛「花火より、君の方が綺麗だな」" },
+      { title: "そうまくんと夜道を歩く！", 
+        text: "街灯の下で肩が少し触れるたびに胸が熱くなる。夜の静けさが、気持ちを際立たせる。",
+        serif: "💛「送ってくよ。君一人だと心配だから」" }
     ];
 
-    function generateIndex(name, max) {
-      const today = new Date();
-      const dateStr = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
-      let hash = 0, key = name + dateStr;
-      for (let i=0; i<key.length; i++){
-        hash = (hash<<5) - hash + key.charCodeAt(i);
-        hash |= 0;
-      }
-      return Math.abs(hash)%max;
+    function generateIndex(max) {
+      return Math.floor(Math.random() * max);
     }
 
     function diagnose() {
       const name = document.getElementById("username").value.trim();
       if (!name) return alert("名前を入力してね！");
-      const r = results[generateIndex(name, results.length)];
+      const r = results[generateIndex(results.length)];
       document.getElementById("result").innerText = `${name}さんの今日の診断は… ${r.title}`;
       document.getElementById("fantasy").innerText = r.text;
+      document.getElementById("serif").innerText = r.serif;
       document.getElementById("result").classList.add("show");
       document.getElementById("fantasy").classList.add("show");
+      document.getElementById("serif").classList.add("show");
       document.querySelector("button[onclick='retry()']").style.display = "inline-block";
 
+      // ハート演出
       for (let i=0;i<15;i++){
         const heart = document.createElement("div");
         heart.className="heart"; heart.innerText="💖";
@@ -150,11 +164,17 @@
         document.body.appendChild(heart);
         setTimeout(()=>heart.remove(), 4000);
       }
+
+      // BGM再生
+      const bgm = document.getElementById("bgm");
+      bgm.volume = 0.6;
+      bgm.play().catch(err => console.log("自動再生ブロック:", err));
     }
 
     function retry(){
       document.getElementById("result").classList.remove("show");
       document.getElementById("fantasy").classList.remove("show");
+      document.getElementById("serif").classList.remove("show");
       setTimeout(diagnose, 100);
     }
 
