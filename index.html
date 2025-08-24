@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>そうまくんと〇〇診断</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: "Yu Gothic", sans-serif;
@@ -44,10 +45,10 @@
       opacity: 0; transition: opacity 1s ease-in;
     }
     #serif {
-      font-family: "Comic Sans MS", "Trebuchet MS", cursive;
-      font-size: 22px;
-      color: #ff69b4;
-      margin-top: 20px;
+      font-family: 'Sacramento', cursive;
+      font-size: 26px;
+      color: #ff66a3;
+      margin-top: 15px;
       opacity: 0;
       transition: opacity 1s ease-in;
     }
@@ -98,63 +99,60 @@
 
   <input type="text" id="username" placeholder="名前を入力してね">
   <br>
-  <button onclick="diagnose()">診断する！</button>
+  <button id="diagnoseBtn" onclick="diagnose()">診断する！</button>
   <button onclick="retry()" style="display:none;">もう一度診断する</button>
 
   <h2 id="result"></h2>
   <p id="fantasy"></p>
   <p id="serif"></p>
 
-  <!-- 🎼 BGM -->
-  <audio id="bgm" loop>
-    <source src="bgm.mp3" type="audio/mpeg">
-  </audio>
+  <!-- BGM -->
+  <audio id="bgm" src="bgm.mp3" loop></audio>
 
   <script>
     const results = [
-      { title: "そうまくんとゲームする！", 
-        text: "一緒に画面を見つめながら、ふと手が触れてドキッ。笑い合う時間が、まるで特別な秘密みたいに感じる。",
-        serif: "💛「勝ったらご褒美、ちょうだい？」" },
-      { title: "そうまくんと自転車で遠出！", 
-        text: "風を切って走る二人の影が並んで伸びる。青空の下で交わす会話に、何気ないのに心が弾む。",
-        serif: "💛「置いてかないから安心しろって」" },
-      { title: "そうまくんとカフェに行く！", 
-        text: "カップを持つ指が少し重なって、視線が合った瞬間に胸が高鳴る。甘い香りよりも彼の笑顔に酔いそう。",
-        serif: "💛「その一口、俺にもくれない？」" },
-      { title: "そうまくんと放課後の教室！", 
-        text: "夕陽が差し込む教室で、他愛のない話に笑い合う。机に広げたノートも、なんだか輝いて見える。",
-        serif: "💛「ずっと、こうしてたいな」" },
-      { title: "そうまくんと映画を見る！", 
-        text: "暗い館内で、隣にいることを意識してしまう。小さな動作ひとつひとつに心臓が跳ねる。",
-        serif: "💛「…手、繋ごっか」" },
-      { title: "そうまくんと図書館で勉強！", 
-        text: "静かな空間に二人の呼吸だけが響く。机の下で足が触れて、視線を逸らすのに必死になる。",
-        serif: "💛「集中できてる？俺のせいじゃないよな？」" },
-      { title: "そうまくんと夏祭り！", 
-        text: "浴衣姿に少し照れながら、屋台を巡る。夜空に花火が上がって、二人の笑顔も弾ける。",
-        serif: "💛「花火より、君の方が綺麗だな」" },
-      { title: "そうまくんと夜道を歩く！", 
-        text: "街灯の下で肩が少し触れるたびに胸が熱くなる。夜の静けさが、気持ちを際立たせる。",
-        serif: "💛「送ってくよ。君一人だと心配だから」" }
+      { title: "そうまくんとゲームする！", text: "一緒に画面を見つめながら、ふと手が触れてドキッ。笑い合う時間が、まるで特別な秘密みたいに感じる。", serif: "💛「その手…もうちょっと貸して？」" },
+      { title: "そうまくんと自転車で遠出！", text: "風を切って走る二人の影が並んで伸びる。青空の下で交わす会話に、何気ないのに心が弾む。", serif: "💛「ついてこれる？俺、待たないよ？」" },
+      { title: "そうまくんとカフェに行く！", text: "カップを持つ指が少し重なって、視線が合った瞬間に胸が高鳴る。甘い香りよりも彼の笑顔に酔いそう。", serif: "💛「…それ、俺と半分こしよ？」" },
+      { title: "そうまくんと放課後の教室！", text: "夕陽が差し込む教室で、他愛のない話に笑い合う。机に広げたノートも、なんだか輝いて見える。", serif: "💛「この時間…ずっと続けばいいのにな」" },
+      { title: "そうまくんと映画を見る！", text: "暗い館内で、隣にいることを意識してしまう。小さな動作ひとつひとつに心臓が跳ねる。", serif: "💛「…手、繋いでもいい？」" },
+      { title: "そうまくんと体育館でバスケ！", text: "ボールを追いかける姿がまぶしくて、思わず応援の声が大きくなる。笑顔が眩しい青春の一コマ。", serif: "💛「次の試合、隣で応援してくれる？」" },
+      { title: "そうまくんと図書館で勉強！", text: "静かな空間に二人の呼吸だけが響く。机の下で足が触れて、視線を逸らすのに必死になる。", serif: "💛「声、出すなよ？バレちゃうから」" },
+      { title: "そうまくんと文化祭の準備！", text: "飾りつけに夢中で手が汚れても笑い合える。賑やかな時間が、思い出に刻まれていく。", serif: "💛「そこ、届かないだろ。俺がやってやる」" },
+      { title: "そうまくんと夜道を歩く！", text: "街灯の下で肩が少し触れるたびに胸が熱くなる。夜の静けさが、気持ちを際立たせる。", serif: "💛「暗いし、もっとこっち来いよ」" },
+      { title: "そうまくんと昼休みに屋上！", text: "お弁当を分け合いながら、空を見上げる。何気ない一瞬が、青春らしい輝きに満ちている。", serif: "💛「その唐揚げ、一個ちょうだい？」" }
     ];
 
+    function playBgm() {
+      const bgm = document.getElementById("bgm");
+      bgm.volume = 0.6;
+      if (bgm.paused) {
+        bgm.play().catch(err => console.log("BGM再生エラー:", err));
+      }
+    }
+
     function generateIndex(max) {
-      return Math.floor(Math.random() * max);
+      return Math.floor(Math.random() * max); // ランダム表示
     }
 
     function diagnose() {
       const name = document.getElementById("username").value.trim();
       if (!name) return alert("名前を入力してね！");
       const r = results[generateIndex(results.length)];
+
       document.getElementById("result").innerText = `${name}さんの今日の診断は… ${r.title}`;
       document.getElementById("fantasy").innerText = r.text;
       document.getElementById("serif").innerText = r.serif;
+
       document.getElementById("result").classList.add("show");
       document.getElementById("fantasy").classList.add("show");
-      document.getElementById("serif").classList.add("show");
+
+      setTimeout(() => {
+        document.getElementById("serif").classList.add("show");
+      }, 800);
+
       document.querySelector("button[onclick='retry()']").style.display = "inline-block";
 
-      // ハート演出
       for (let i=0;i<15;i++){
         const heart = document.createElement("div");
         heart.className="heart"; heart.innerText="💖";
@@ -164,11 +162,6 @@
         document.body.appendChild(heart);
         setTimeout(()=>heart.remove(), 4000);
       }
-
-      // BGM再生
-      const bgm = document.getElementById("bgm");
-      bgm.volume = 0.6;
-      bgm.play().catch(err => console.log("自動再生ブロック:", err));
     }
 
     function retry(){
@@ -178,7 +171,7 @@
       setTimeout(diagnose, 100);
     }
 
-    // 🌟 星とシャボン玉の生成
+    // 星とシャボン玉
     function createStars(num) {
       for (let i = 0; i < num; i++) {
         const star = document.createElement("div");
@@ -206,6 +199,9 @@
     }
     createStars(25);
     createBubbles(15);
+
+    // ボタンクリックでBGM再生
+    document.getElementById("diagnoseBtn").addEventListener("click", playBgm);
   </script>
 </body>
 </html>
