@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>幼なじみ恋愛ゲーム</title>
+  <style>
+    body {
+      font-family: "Helvetica", "Arial", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: black;
+      text-align: center;
+      color: white;
+    }
+    #game {
+      width: 90%;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 10px;
+      background: rgba(0,0,0,0.6);
+      border-radius: 10px;
+      position: relative;
+    }
+    #background {
+      width: 100%;
+      height: 300px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 10px;
+    }
+    #character {
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      max-height: 250px;
+    }
+    #text {
+      min-height: 100px;
+      margin: 20px;
+      font-size: 18px;
+    }
+    .choice {
+      display: block;
+      margin: 10px auto;
+      padding: 10px 20px;
+      background: #ffb6c1;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      color: black;
+    }
+    .choice:hover {
+      background: #ff91af;
+    }
+  </style>
+</head>
+<body>
+  <div id="game">
+    <div id="background"></div>
+    <img id="character" src="" alt="キャラ" style="display:none;">
+    <div id="text"></div>
+    <div id="choices"></div>
+  </div>
+
+  <script>
+    let storyIndex = 0;
+    let affection = 0;
+
+    const story = [
+      {
+        text: "春。入学式の日。幼なじみのそうまが声をかけてきた。",
+        bg: "https://picsum.photos/id/1015/600/300", // 背景（仮）
+        char: "https://i.ibb.co/6vWwJrR/sample-boy.png", // キャラ立ち絵（仮）
+        choices: [{ text: "「おはよ！」", next: 1, affection: +1 },
+                  { text: "「……眠い」", next: 1, affection: 0 }]
+      },
+      {
+        text: "そうま「相変わらずだな」",
+        bg: "https://picsum.photos/id/1011/600/300",
+        char: "https://i.ibb.co/6vWwJrR/sample-boy.png",
+        choices: [{ text: "笑ってごまかす", next: 2, affection: +1 },
+                  { text: "無言でそらす", next: 2, affection: -1 }]
+      },
+      {
+        text: "放課後、そうまが言う。「一緒に帰るか？」",
+        bg: "https://picsum.photos/id/1016/600/300",
+        char: "https://i.ibb.co/6vWwJrR/sample-boy.png",
+        choices: [{ text: "「もちろん！」", next: 3, affection: +2 },
+                  { text: "「ごめん、今日は用事ある」", next: 3, affection: -1 }]
+      },
+      {
+        text: "数年後、卒業式の日。桜の下で二人は向き合った。",
+        bg: "https://picsum.photos/id/1025/600/300",
+        char: "https://i.ibb.co/6vWwJrR/sample-boy.png",
+        choices: [{ text: "エンディングへ", next: "end", affection: 0 }]
+      }
+    ];
+
+    function showScene(index) {
+      const scene = story[index];
+      document.getElementById("text").textContent = scene.text;
+
+      // 背景切り替え
+      document.getElementById("background").style.backgroundImage = `url(${scene.bg})`;
+
+      // キャラ立ち絵表示
+      const charImg = document.getElementById("character");
+      if (scene.char) {
+        charImg.src = scene.char;
+        charImg.style.display = "block";
+      } else {
+        charImg.style.display = "none";
+      }
+
+      // 選択肢表示
+      const choicesDiv = document.getElementById("choices");
+      choicesDiv.innerHTML = "";
+      scene.choices.forEach(choice => {
+        const button = document.createElement("button");
+        button.textContent = choice.text;
+        button.className = "choice";
+        button.onclick = () => {
+          affection += choice.affection;
+          if (choice.next === "end") {
+            showEnding();
+          } else {
+            showScene(choice.next);
+          }
+        };
+        choicesDiv.appendChild(button);
+      });
+    }
+
+    function showEnding() {
+      let endingText = "";
+      let bgUrl = "https://picsum.photos/id/103/600/300"; // 卒業背景（仮）
+
+      if (affection >= 3) {
+        endingText = "そうま「卒業しても、ずっと一緒にいような」──恋人END💖";
+      } else if (affection >= 1) {
+        endingText = "そうま「これからも友達でいよう」──友達END🌸";
+      } else {
+        endingText = "「ありがとう。元気でな」──バッドEND💔";
+      }
+
+      document.getElementById("text").textContent = endingText;
+      document.getElementById("background").style.backgroundImage = `url(${bgUrl})`;
+      document.getElementById("character").style.display = "none";
+      document.getElementById("choices").innerHTML = "";
+    }
+
+    // ゲーム開始
+    showScene(storyIndex);
+  </script>
+</body>
+</html>
